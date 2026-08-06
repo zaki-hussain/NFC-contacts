@@ -1,12 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NFC Card</string>
-    <string name="instructions">Enter a link, tap Save, then hold another phone against the back of this one. Keep the screen on and unlocked.</string>
-    <string name="url_hint">https://example.com</string>
+
+    <string name="tap_hint">Tap phones together, or scan the code</string>
+    <string name="qr_desc">QR code of the shared link</string>
+    <string name="nothing_shared">Nothing shared yet — add a profile or enter a link below</string>
+    <string name="one_off_link">One-off link</string>
+    <string name="clear_one_off">Stop sharing one-off link</string>
+    <string name="one_off_hint">Share a one-off link</string>
+    <string name="share">Share</string>
+
+    <string name="profiles">Profiles</string>
+    <string name="empty_profiles">No profiles yet. Tap + to add LinkedIn, WhatsApp, or any link.\nTap a profile to share it; long-press to edit.</string>
+    <string name="add_profile">Add profile</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="linkedin">LinkedIn</string>
+    <string name="whatsapp">WhatsApp</string>
+    <string name="custom">Custom</string>
+    <string name="name">Name</string>
+    <string name="hint_linkedin">LinkedIn URL or username</string>
+    <string name="hint_whatsapp">Phone number with country code</string>
+    <string name="hint_custom">Link (https://…)</string>
+    <string name="error_invalid_linkedin">Enter a LinkedIn URL or username</string>
+    <string name="error_invalid_phone">Enter a phone number with country code</string>
+    <string name="error_invalid_link">Enter a valid link</string>
+
     <string name="save">Save</string>
-    <string name="saved">Saved</string>
-    <string name="status_empty">No link set yet.</string>
-    <string name="status_ready">Sharing: %1$s</string>
-    <string name="no_nfc">This device has no NFC hardware.</string>
-    <string name="nfc_off">NFC is turned off — enable it in system settings.</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="delete_profile_title">Delete %1$s?</string>
+
+    <string name="no_nfc">This device has no NFC — the QR code still works.</string>
+    <string name="nfc_off">NFC is off — enable it in settings, or use the QR code.</string>
 </resources>

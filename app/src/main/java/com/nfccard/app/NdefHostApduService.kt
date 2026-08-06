@@ -14,11 +14,8 @@ class NdefHostApduService : HostApduService() {
     private var tag: Type4Tag? = null
 
     override fun processCommandApdu(apdu: ByteArray, extras: Bundle?): ByteArray {
-        val tag = this.tag ?: run {
-            val url = getSharedPreferences(Prefs.NAME, MODE_PRIVATE)
-                .getString(Prefs.KEY_URL, null) ?: ""
-            Type4Tag(url).also { this.tag = it }
-        }
+        val tag = this.tag ?: Type4Tag(ProfileStore.currentUrl(this) ?: "")
+            .also { this.tag = it }
         return tag.process(apdu)
     }
 
