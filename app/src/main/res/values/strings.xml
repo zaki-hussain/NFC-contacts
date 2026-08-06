@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NFC Card</string>
+    <string name="instructions">Enter a link, tap Save, then hold another phone against the back of this one. Keep the screen on and unlocked.</string>
+    <string name="url_hint">https://example.com</string>
+    <string name="save">Save</string>
+    <string name="saved">Saved</string>
+    <string name="status_empty">No link set yet.</string>
+    <string name="status_ready">Sharing: %1$s</string>
+    <string name="no_nfc">This device has no NFC hardware.</string>
+    <string name="nfc_off">NFC is turned off — enable it in system settings.</string>
+</resources>
