@@ -29,6 +29,12 @@ class ProfileJsonTest {
     }
 
     @Test
+    fun `explicit json nulls are dropped`() {
+        val json = """[{"id":"1","name":null,"url":null,"kind":null}]"""
+        assertTrue(Profile.listFromJson(json).isEmpty())
+    }
+
+    @Test
     fun `entries missing id or url are dropped`() {
         val json = """[{"id":"","name":"a","url":"https://x.com","kind":"CUSTOM"},
                        {"id":"2","name":"b","url":"","kind":"CUSTOM"},

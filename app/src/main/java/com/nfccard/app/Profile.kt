@@ -30,11 +30,13 @@ data class Profile(
             val arr = JSONArray(json)
             (0 until arr.length()).mapNotNull { i ->
                 val o = arr.optJSONObject(i) ?: return@mapNotNull null
+                // isNull-guarded: Android's optString returns "null" for JSON nulls
+                fun str(key: String) = if (o.isNull(key)) "" else o.optString(key)
                 Profile(
-                    id = o.optString("id"),
-                    name = o.optString("name"),
-                    url = o.optString("url"),
-                    kind = runCatching { ProfileKind.valueOf(o.optString("kind")) }
+                    id = str("id"),
+                    name = str("name"),
+                    url = str("url"),
+                    kind = runCatching { ProfileKind.valueOf(str("kind")) }
                         .getOrDefault(ProfileKind.CUSTOM)
                 )
             }.filter { it.id.isNotEmpty() && it.url.isNotEmpty() }

@@ -72,6 +72,34 @@ class Type4TagTest {
     }
 
     @Test
+    fun `multibyte url at sr boundary switches to long record by byte count`() {
+        // 135 chars but 255 UTF-8 bytes -> uriBytes.size 256 -> long-record form
+        val url = "https://ex.com/" + "é".repeat(120)
+        val message = readTag(Type4Tag(url))
+        assertEquals(0xC1.toByte(), message[0])
+        assertEquals(url, String(message.copyOfRange(8, message.size)))
+    }
+
+    @Test
+    fun `multibyte url just under sr boundary stays short record`() {
+        // 134 chars, 254 UTF-8 bytes -> uriBytes.size 255 -> SR with length byte 0xFF
+        val url = "https://e.com/" + "é".repeat(120)
+        val message = readTag(Type4Tag(url))
+        assertEquals(0xD1.toByte(), message[0])
+        assertEquals(0xFF.toByte(), message[2])
+        assertEquals(url, String(message.copyOfRange(5, message.size)))
+    }
+
+    @Test
+    fun `blank url serves empty ndef file`() {
+        val tag = Type4Tag("")
+        assertArrayEquals(Type4Tag.OK, tag.process(hex("00 A4 0400 07 D2760000850101 00")))
+        assertArrayEquals(Type4Tag.OK, tag.process(hex("00 A4 000C 02 E104")))
+        // NLEN must be 0x0000: a valid empty tag, not an empty URI record
+        assertArrayEquals(byteArrayOf(0x00, 0x00) + Type4Tag.OK, tag.process(hex("00 B0 0000 02")))
+    }
+
+    @Test
     fun `select by aid also accepted without trailing le byte`() {
         val tag = Type4Tag("https://a.b")
         assertArrayEquals(Type4Tag.OK, tag.process(hex("00 A4 0400 07 D2760000850101")))

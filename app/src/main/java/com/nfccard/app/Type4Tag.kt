@@ -27,9 +27,10 @@ class Type4Tag(url: String) {
 
     private var selectedFile = SelectedFile.NONE
 
-    /** NDEF file: 2-byte length prefix followed by the NDEF message. */
+    /** NDEF file: 2-byte length prefix followed by the NDEF message.
+     *  A blank URL yields NLEN=0 — a valid empty tag readers cleanly ignore. */
     private val ndefFile: ByteArray = run {
-        val message = ndefUriMessage(url)
+        val message = if (url.isBlank()) ByteArray(0) else ndefUriMessage(url)
         byteArrayOf(
             (message.size shr 8).toByte(),
             (message.size and 0xFF).toByte()
