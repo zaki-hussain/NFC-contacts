@@ -80,6 +80,11 @@ class MainActivity : AppCompatActivity() {
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
             ProfileDialogFragment.show(supportFragmentManager, null)
         }
+        qrImage.setOnClickListener {
+            if (ProfileStore.currentUrl(this) != null) {
+                QrDialogFragment.show(supportFragmentManager)
+            }
+        }
     }
 
     override fun onResume() {

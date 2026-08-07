@@ -3,7 +3,8 @@
     <string name="app_name">NFC Card</string>
 
     <string name="tap_hint">Tap phones together, or scan the code</string>
-    <string name="qr_desc">QR code of the shared link</string>
+    <string name="qr_desc">QR code of the shared link — tap to enlarge</string>
+    <string name="close">Close</string>
     <string name="nothing_shared">Nothing shared yet — add a profile or enter a link below</string>
     <string name="one_off_link">One-off link</string>
     <string name="clear_one_off">Stop sharing one-off link</string>
