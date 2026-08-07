@@ -12,7 +12,7 @@
     <string name="share">Share</string>
 
     <string name="profiles">Profiles</string>
-    <string name="empty_profiles">No profiles yet. Tap + to add LinkedIn, WhatsApp, or any link.\nTap a profile to share it; long-press to edit.</string>
+    <string name="empty_profiles">No profiles yet. Tap + to add your contact card, LinkedIn, WhatsApp, or any link.\nTap a profile to share it; long-press to edit.</string>
     <string name="add_profile">Add profile</string>
     <string name="edit_profile">Edit profile</string>
     <string name="linkedin">LinkedIn</string>

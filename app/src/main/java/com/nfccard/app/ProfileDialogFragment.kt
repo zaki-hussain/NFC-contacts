@@ -86,10 +86,10 @@ class ProfileDialogFragment : DialogFragment() {
         }
 
         when (existing?.kind) {
+            ProfileKind.LINKEDIN -> chips.check(R.id.chip_linkedin)
             ProfileKind.WHATSAPP -> chips.check(R.id.chip_whatsapp)
             ProfileKind.CUSTOM -> chips.check(R.id.chip_custom)
-            ProfileKind.VCARD -> chips.check(R.id.chip_contact)
-            else -> chips.check(R.id.chip_linkedin)
+            ProfileKind.VCARD, null -> chips.check(R.id.chip_contact)
         }
         applyKind()
         if (existing != null) {
