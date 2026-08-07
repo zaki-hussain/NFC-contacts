@@ -3,7 +3,7 @@ package com.nfccard.app
 import org.json.JSONArray
 import org.json.JSONObject
 
-enum class ProfileKind { LINKEDIN, WHATSAPP, CUSTOM }
+enum class ProfileKind { LINKEDIN, WHATSAPP, CUSTOM, VCARD }
 
 data class Profile(
     val id: String,

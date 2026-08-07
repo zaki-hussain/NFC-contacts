@@ -53,7 +53,7 @@ class Type4TagTest {
 
     @Test
     fun `reader flow yields URI record for short url`() {
-        val message = readTag(Type4Tag("https://example.com"))
+        val message = readTag(Type4Tag(Ndef.uriMessage("https://example.com")))
         // D1 01 <len> 55 00 <url>
         assertEquals(0xD1.toByte(), message[0])
         assertEquals(0x55.toByte(), message[3])
@@ -64,7 +64,7 @@ class Type4TagTest {
     @Test
     fun `reader flow yields URI record for long url`() {
         val url = "https://example.com/" + "x".repeat(400)
-        val message = readTag(Type4Tag(url))
+        val message = readTag(Type4Tag(Ndef.uriMessage(url)))
         // C1 01 <len:4> 55 00 <url>
         assertEquals(0xC1.toByte(), message[0])
         assertEquals(0x55.toByte(), message[6])
@@ -75,7 +75,7 @@ class Type4TagTest {
     fun `multibyte url at sr boundary switches to long record by byte count`() {
         // 135 chars but 255 UTF-8 bytes -> uriBytes.size 256 -> long-record form
         val url = "https://ex.com/" + "é".repeat(120)
-        val message = readTag(Type4Tag(url))
+        val message = readTag(Type4Tag(Ndef.uriMessage(url)))
         assertEquals(0xC1.toByte(), message[0])
         assertEquals(url, String(message.copyOfRange(8, message.size)))
     }
@@ -84,15 +84,26 @@ class Type4TagTest {
     fun `multibyte url just under sr boundary stays short record`() {
         // 134 chars, 254 UTF-8 bytes -> uriBytes.size 255 -> SR with length byte 0xFF
         val url = "https://e.com/" + "é".repeat(120)
-        val message = readTag(Type4Tag(url))
+        val message = readTag(Type4Tag(Ndef.uriMessage(url)))
         assertEquals(0xD1.toByte(), message[0])
         assertEquals(0xFF.toByte(), message[2])
         assertEquals(url, String(message.copyOfRange(5, message.size)))
     }
 
     @Test
+    fun `reader flow yields mime record for vcard`() {
+        val vcard = "BEGIN:VCARD\r\nVERSION:3.0\r\nFN:Zaki\r\nEND:VCARD"
+        val message = readTag(Type4Tag(Ndef.mimeMessage("text/vcard", vcard.toByteArray())))
+        // D2 <typeLen> <payloadLen> "text/vcard" <vcard>
+        assertEquals(0xD2.toByte(), message[0])
+        assertEquals(10, message[1].toInt())
+        assertEquals("text/vcard", String(message.copyOfRange(3, 13)))
+        assertEquals(vcard, String(message.copyOfRange(13, message.size)))
+    }
+
+    @Test
     fun `blank url serves empty ndef file`() {
-        val tag = Type4Tag("")
+        val tag = Type4Tag(ByteArray(0))
         assertArrayEquals(Type4Tag.OK, tag.process(hex("00 A4 0400 07 D2760000850101 00")))
         assertArrayEquals(Type4Tag.OK, tag.process(hex("00 A4 000C 02 E104")))
         // NLEN must be 0x0000: a valid empty tag, not an empty URI record
@@ -101,19 +112,19 @@ class Type4TagTest {
 
     @Test
     fun `select by aid also accepted without trailing le byte`() {
-        val tag = Type4Tag("https://a.b")
+        val tag = Type4Tag(Ndef.uriMessage("https://a.b"))
         assertArrayEquals(Type4Tag.OK, tag.process(hex("00 A4 0400 07 D2760000850101")))
     }
 
     @Test
     fun `read before select fails`() {
-        val tag = Type4Tag("https://a.b")
+        val tag = Type4Tag(Ndef.uriMessage("https://a.b"))
         assertArrayEquals(Type4Tag.ERROR, tag.process(hex("00 B0 0000 0F")))
     }
 
     @Test
     fun `unknown aid rejected`() {
-        val tag = Type4Tag("https://a.b")
+        val tag = Type4Tag(Ndef.uriMessage("https://a.b"))
         assertArrayEquals(Type4Tag.ERROR, tag.process(hex("00 A4 0400 07 A0000000000000")))
     }
 

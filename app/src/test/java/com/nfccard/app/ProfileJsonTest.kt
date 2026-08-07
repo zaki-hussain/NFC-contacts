@@ -11,7 +11,8 @@ class ProfileJsonTest {
         val profiles = listOf(
             Profile("1", "LinkedIn", "https://www.linkedin.com/in/zaki", ProfileKind.LINKEDIN),
             Profile("2", "WhatsApp", "https://wa.me/447700900123", ProfileKind.WHATSAPP),
-            Profile("3", "Portfolio — \"dev\"", "https://example.com?a=1&b=2", ProfileKind.CUSTOM)
+            Profile("3", "Portfolio — \"dev\"", "https://example.com?a=1&b=2", ProfileKind.CUSTOM),
+            Profile("4", "Me", "BEGIN:VCARD\r\nVERSION:3.0\r\nFN:Me\r\nEND:VCARD", ProfileKind.VCARD)
         )
         assertEquals(profiles, Profile.listFromJson(Profile.listToJson(profiles)))
     }

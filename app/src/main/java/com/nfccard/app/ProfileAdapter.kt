@@ -44,7 +44,11 @@ class ProfileAdapter(
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val profile = items[position]
         holder.name.text = profile.name
-        holder.url.text = profile.url
+        holder.url.text = if (profile.kind == ProfileKind.VCARD) {
+            holder.url.context.getString(R.string.contact_card)
+        } else {
+            profile.url
+        }
         when (profile.kind) {
             ProfileKind.LINKEDIN -> {
                 holder.icon.setImageResource(R.drawable.ic_linkedin)
@@ -54,8 +58,10 @@ class ProfileAdapter(
                 holder.icon.setImageResource(R.drawable.ic_whatsapp)
                 holder.icon.imageTintList = null
             }
-            ProfileKind.CUSTOM -> {
-                holder.icon.setImageResource(R.drawable.ic_link)
+            ProfileKind.CUSTOM, ProfileKind.VCARD -> {
+                holder.icon.setImageResource(
+                    if (profile.kind == ProfileKind.VCARD) R.drawable.ic_person else R.drawable.ic_link
+                )
                 holder.icon.imageTintList = ColorStateList.valueOf(
                     MaterialColors.getColor(
                         holder.icon,

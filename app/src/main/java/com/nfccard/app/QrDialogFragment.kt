@@ -14,15 +14,16 @@ class QrDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = Dialog(requireContext(), R.style.Theme_NFCCard_QrDialog)
-        val url = ProfileStore.currentUrl(requireContext())
-        if (url == null) {
-            // Link disappeared (e.g. profile deleted); nothing to show
+        val bitmap = ProfileStore.currentShare(requireContext())
+            ?.let { runCatching { QrEncoder.encode(it.payload, 1024) }.getOrNull() }
+        if (bitmap == null) {
+            // Share disappeared (e.g. profile deleted); nothing to show
             dismiss()
             return dialog
         }
         val view = layoutInflater.inflate(R.layout.dialog_qr, null)
         val qr = view.findViewById<ImageView>(R.id.qr_large)
-        qr.setImageBitmap(QrEncoder.encode(url, 1024))
+        qr.setImageBitmap(bitmap)
         (qr.drawable as? BitmapDrawable)?.setFilterBitmap(false)
 
         view.setOnClickListener { dismiss() }

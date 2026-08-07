@@ -6,7 +6,7 @@ Uses Host Card Emulation to emulate an NFC Forum Type 4 Tag serving an NDEF URI 
 
 ## Usage
 
-1. Tap **+** to add profiles: LinkedIn (URL or username), WhatsApp (phone number → wa.me link), or any custom link.
+1. Tap **+** to add profiles: LinkedIn (URL or username), WhatsApp (phone number → wa.me link), any custom link, or a contact card (attach a .vcf file; photos are stripped to fit NFC/QR limits).
 2. Tap a profile to make it the shared link, or type a one-off link and hit Share.
 3. Hold the other phone's NFC antenna against yours (screen on, unlocked), or let them scan the QR code.
 

@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
             ProfileDialogFragment.show(supportFragmentManager, null)
         }
         qrImage.setOnClickListener {
-            if (ProfileStore.currentUrl(this) != null) {
+            if (ProfileStore.currentShare(this) != null) {
                 QrDialogFragment.show(supportFragmentManager)
             }
         }
@@ -130,6 +130,7 @@ class MainActivity : AppCompatActivity() {
 
         val active = profiles.find { it.id == activeId }
         val url = oneOff ?: active?.url
+        val isVcard = oneOff == null && active?.kind == ProfileKind.VCARD
         clearOneOff.visibility = if (oneOff != null) View.VISIBLE else View.GONE
 
         // Brand the card around the QR code for built-in profile types
@@ -156,13 +157,18 @@ class MainActivity : AppCompatActivity() {
             currentUrl.text = ""
             currentUrl.visibility = View.GONE
         } else {
-            qrImage.visibility = View.VISIBLE
             tapHint.visibility = View.VISIBLE
             currentUrl.visibility = View.VISIBLE
             activeLabel.text = if (oneOff != null) getString(R.string.one_off_link) else active!!.name
-            currentUrl.text = url
-            qrImage.setImageBitmap(QrEncoder.encode(url, 512))
-            (qrImage.drawable as? BitmapDrawable)?.setFilterBitmap(false)
+            currentUrl.text = if (isVcard) getString(R.string.contact_card) else url
+            val bitmap = runCatching { QrEncoder.encode(url, 512) }.getOrNull()
+            if (bitmap != null) {
+                qrImage.visibility = View.VISIBLE
+                qrImage.setImageBitmap(bitmap)
+                (qrImage.drawable as? BitmapDrawable)?.setFilterBitmap(false)
+            } else {
+                qrImage.visibility = View.GONE
+            }
         }
     }
 

@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import java.util.UUID
 
+/** What is currently being shared: a URL, or vCard text for contact cards. */
+data class Share(val payload: String, val isVcard: Boolean)
+
 /**
  * Persistence for profiles and the currently shared link.
  * The shared link is the one-off URL if set, otherwise the active profile's URL.
@@ -49,10 +52,13 @@ object ProfileStore {
         prefs(context).edit().remove(KEY_ONE_OFF).apply()
     }
 
-    /** The URL currently served over NFC and shown as QR. */
-    fun currentUrl(context: Context): String? =
-        oneOffUrl(context)
-            ?: profiles(context).find { it.id == activeId(context) }?.url?.takeIf { it.isNotBlank() }
+    /** What's currently served over NFC and shown as QR, or null if nothing. */
+    fun currentShare(context: Context): Share? {
+        oneOffUrl(context)?.let { return Share(it, isVcard = false) }
+        val active = profiles(context).find { it.id == activeId(context) } ?: return null
+        if (active.url.isBlank()) return null
+        return Share(active.url, isVcard = active.kind == ProfileKind.VCARD)
+    }
 
     /** v0.1 stored a single URL under "url"; turn it into a custom profile once. */
     private fun migrateLegacyUrl(context: Context) {

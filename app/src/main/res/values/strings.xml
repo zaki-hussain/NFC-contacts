@@ -18,6 +18,14 @@
     <string name="linkedin">LinkedIn</string>
     <string name="whatsapp">WhatsApp</string>
     <string name="custom">Custom</string>
+    <string name="contact">Contact</string>
+    <string name="contact_card">Contact card</string>
+    <string name="attach_vcard">Attach .vcf file</string>
+    <string name="vcard_none">No contact file attached. In your contacts app, share a contact as a file.</string>
+    <string name="vcard_loaded">Loaded: %1$s</string>
+    <string name="error_no_vcard">Attach a contact card file first</string>
+    <string name="error_bad_vcard">That file isn\'t a vCard (.vcf)</string>
+    <string name="error_vcard_too_big">Contact card too large to share (try one without a photo)</string>
     <string name="name">Name</string>
     <string name="hint_linkedin">LinkedIn URL or username</string>
     <string name="hint_whatsapp">Phone number with country code</string>

@@ -3,9 +3,9 @@ package com.nfccard.app
 /**
  * NFC Forum Type 4 Tag protocol state machine, independent of Android
  * classes so it can be unit tested. Serves a capability container file
- * and a read-only NDEF file containing a single URI record.
+ * and a read-only NDEF file containing the given NDEF message.
  */
-class Type4Tag(url: String) {
+class Type4Tag(ndefMessage: ByteArray) {
 
     companion object {
         val OK = byteArrayOf(0x90.toByte(), 0x00)
@@ -28,14 +28,11 @@ class Type4Tag(url: String) {
     private var selectedFile = SelectedFile.NONE
 
     /** NDEF file: 2-byte length prefix followed by the NDEF message.
-     *  A blank URL yields NLEN=0 — a valid empty tag readers cleanly ignore. */
-    private val ndefFile: ByteArray = run {
-        val message = if (url.isBlank()) ByteArray(0) else ndefUriMessage(url)
-        byteArrayOf(
-            (message.size shr 8).toByte(),
-            (message.size and 0xFF).toByte()
-        ) + message
-    }
+     *  An empty message yields NLEN=0 — a valid empty tag readers cleanly ignore. */
+    private val ndefFile: ByteArray = byteArrayOf(
+        (ndefMessage.size shr 8).toByte(),
+        (ndefMessage.size and 0xFF).toByte()
+    ) + ndefMessage
 
     fun process(apdu: ByteArray): ByteArray {
         // SELECT: 00 A4 <p1> <p2> <lc> <data...> [le]
@@ -77,26 +74,5 @@ class Type4Tag(url: String) {
 
     fun reset() {
         selectedFile = SelectedFile.NONE
-    }
-
-    /** Single well-known URI record (type "U", identifier code 0x00 = full URI). */
-    private fun ndefUriMessage(url: String): ByteArray {
-        val uriBytes = byteArrayOf(0x00) + url.toByteArray(Charsets.UTF_8)
-        return if (uriBytes.size < 256) {
-            byteArrayOf(
-                0xD1.toByte(), // MB|ME|SR, TNF=well-known
-                0x01,          // type length
-                uriBytes.size.toByte(),
-                0x55           // 'U'
-            ) + uriBytes
-        } else {
-            byteArrayOf(0xC1.toByte(), 0x01) +
-                byteArrayOf(
-                    (uriBytes.size ushr 24).toByte(),
-                    (uriBytes.size ushr 16).toByte(),
-                    (uriBytes.size ushr 8).toByte(),
-                    uriBytes.size.toByte()
-                ) + byteArrayOf(0x55) + uriBytes
-        }
     }
 }
