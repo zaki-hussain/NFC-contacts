@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.NFCCard" parent="Theme.Material3.DayNight.NoActionBar" />
+    <style name="Theme.NFCCard" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Neutral accents instead of the M3 baseline purple.
+             DynamicColors overlays these with the system palette on Android 12+. -->
+        <item name="colorPrimary">@color/neutral_primary</item>
+        <item name="colorOnPrimary">@color/neutral_on_primary</item>
+        <item name="colorPrimaryContainer">@color/neutral_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/neutral_on_primary_container</item>
+        <item name="colorSecondary">@color/neutral_secondary</item>
+        <item name="colorOnSecondary">@color/neutral_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/neutral_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/neutral_on_secondary_container</item>
+        <item name="colorTertiary">@color/neutral_secondary</item>
+        <item name="colorOnTertiary">@color/neutral_on_secondary</item>
+        <item name="colorTertiaryContainer">@color/neutral_secondary_container</item>
+        <item name="colorOnTertiaryContainer">@color/neutral_on_secondary_container</item>
+    </style>
 
     <style name="Theme.NFCCard.QrDialog">
         <item name="android:windowIsFloating">false</item>

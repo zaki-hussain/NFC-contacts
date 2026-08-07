@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.color.DynamicColors
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -41,6 +42,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Follow the system's Material You palette on Android 12+; neutral grays otherwise
+        DynamicColors.applyToActivityIfAvailable(this)
         setContentView(R.layout.activity_main)
         // NFC card emulation needs the screen on; keep it on while presenting
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

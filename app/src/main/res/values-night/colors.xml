@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="neutral_primary">#C7C7C7</color>
+    <color name="neutral_on_primary">#2B2B2B</color>
+    <color name="neutral_primary_container">#474747</color>
+    <color name="neutral_on_primary_container">#E3E3E3</color>
+    <color name="neutral_secondary">#C6C6C6</color>
+    <color name="neutral_on_secondary">#2B2B2B</color>
+    <color name="neutral_secondary_container">#454545</color>
+    <color name="neutral_on_secondary_container">#E4E4E4</color>
+</resources>
