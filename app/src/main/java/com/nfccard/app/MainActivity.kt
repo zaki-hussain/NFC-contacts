@@ -1,5 +1,6 @@
 package com.nfccard.app
 
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.nfc.NfcAdapter
 import android.os.Bundle
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -23,6 +25,7 @@ import com.google.android.material.textfield.TextInputLayout
 class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: ProfileAdapter
+    private lateinit var qrCard: MaterialCardView
     private lateinit var qrImage: ImageView
     private lateinit var activeLabel: TextView
     private lateinit var clearOneOff: ImageButton
@@ -32,6 +35,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var emptyView: TextView
     private lateinit var oneOffInput: TextInputEditText
     private lateinit var oneOffLayout: TextInputLayout
+    private var defaultCardColor = 0
+    private var defaultLabelColor = 0
+    private var defaultSubColor = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         // NFC card emulation needs the screen on; keep it on while presenting
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+        qrCard = findViewById(R.id.qr_card)
         qrImage = findViewById(R.id.qr_image)
         activeLabel = findViewById(R.id.active_label)
         clearOneOff = findViewById(R.id.clear_one_off)
@@ -48,6 +55,9 @@ class MainActivity : AppCompatActivity() {
         emptyView = findViewById(R.id.empty_view)
         oneOffInput = findViewById(R.id.one_off_input)
         oneOffLayout = findViewById(R.id.one_off_layout)
+        defaultCardColor = qrCard.cardBackgroundColor.defaultColor
+        defaultLabelColor = activeLabel.currentTextColor
+        defaultSubColor = currentUrl.currentTextColor
 
         adapter = ProfileAdapter(
             onSelect = { profile ->
@@ -121,6 +131,24 @@ class MainActivity : AppCompatActivity() {
         val active = profiles.find { it.id == activeId }
         val url = oneOff ?: active?.url
         clearOneOff.visibility = if (oneOff != null) View.VISIBLE else View.GONE
+
+        // Brand the card around the QR code for built-in profile types
+        val brandColor = if (oneOff == null) when (active?.kind) {
+            ProfileKind.LINKEDIN -> getColor(R.color.linkedin_blue)
+            ProfileKind.WHATSAPP -> getColor(R.color.whatsapp_green)
+            else -> null
+        } else null
+        if (brandColor != null) {
+            qrCard.setCardBackgroundColor(brandColor)
+            activeLabel.setTextColor(Color.WHITE)
+            currentUrl.setTextColor(Color.WHITE)
+            tapHint.setTextColor(Color.WHITE)
+        } else {
+            qrCard.setCardBackgroundColor(defaultCardColor)
+            activeLabel.setTextColor(defaultLabelColor)
+            currentUrl.setTextColor(defaultSubColor)
+            tapHint.setTextColor(defaultSubColor)
+        }
         if (url.isNullOrBlank()) {
             qrImage.visibility = View.GONE
             tapHint.visibility = View.GONE
